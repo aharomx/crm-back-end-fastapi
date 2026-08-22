@@ -19,7 +19,7 @@ class Contacto(Base):
     # Si es Null, el contacto es una empresa independiente
     empresa_id = Column(
         Integer,
-        ForeignKey("empresa_id", ondelete="SET NULL"),
+        ForeignKey("empresas.id", ondelete="SET NULL"),
         nullable=True,
         index=True
     )

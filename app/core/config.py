@@ -12,20 +12,27 @@ class Settings(BaseSettings):
 
 
     # Configuración de PostreSQL
-    POSTGRES_SERVER: str = "localhost"
-    POSTGRES_PORT: str = "5433" # puerto que se configuró en el wsl
-    POSTGRES_USER: str = "crm_user"
-    POSTGRES_PASSWORD: str = "crm_password_2024"
-    POSTGRES_DB: str = "crm_ventas"
+    #POSTGRES_SERVER: str = "localhost"
+    #POSTGRES_PORT: str = "5433" # puerto que se configuró en el wsl
+    #POSTGRES_USER: str = "postgres"
+    #POSTGRES_PASSWORD: str = "postgres"
+    #POSTGRES_DB: str = "crm_ventas"
 
-    # URL de conexión (se contruye automáticamente)
+    # Usaremos  SQLite para desarrollo
+    DATABASE_URL: str= "sqlite:///./crm_ventas.db"
+
     @property
-    def DATABASE_URL(self) -> str:
-        """ Construir la URL de conexión a PosrgreSQL"""
-        return(
-            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
-            f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-        )
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
+        return self.DATABASE_URL
+    
+    # URL de conexión (se contruye automáticamente)
+    #@property
+    #def DATABASE_URL(self) -> str:
+    #    """ Construir la URL de conexión a PosrgreSQL"""
+    #    return(
+    #        f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+    #        f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+    #    )
 
     # Configuración de seguridad
     SECRET_KEY: str = "Clave-secreta-que-vamos-a-generar"

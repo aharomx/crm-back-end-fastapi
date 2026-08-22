@@ -7,16 +7,25 @@ from app.core.config import settings
 # crear el motor de la base da datos
 # pool_pre_ping=True verifica que la conexión esté viva antes de usarla
 
-engine =create_engine(
+
+
+# Para SQLite
+if settings.DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(
+        settings.DATABASE_URL,
+        connect_args={"check_same_thread": False}  # Necesario para SQLite
+    )
+else:
+    engine =create_engine(
     settings.DATABASE_URL,
     pool_pre_ping=True,
     echo=True, # Muestra las consultas SQL en consola (util para desarrollo)
-)
+    )
 
 # Crear la fabrica de sesiones
 # Cada sesión es una "conversación" con la base de datos
 SessionLocal = sessionmaker(
-    autocomit=False,
+    autocommit=False,
     autoflush=False,
     bind=engine
 )

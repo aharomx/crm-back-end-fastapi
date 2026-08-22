@@ -34,7 +34,7 @@ class Empresa(Base):
     tamano_empresa = Column(String(50), nullable=True)
 
     # Información de contacto
-    Telefono_principal = Column(String(20), nullable=True)
+    telefono_principal = Column(String(20), nullable=True)
     sitio_web = Column(String(100), nullable=True)
 
     # Dirección
@@ -60,8 +60,11 @@ class Empresa(Base):
     # Una empresa tiene muchos contactos
     contactos = relationship("Contacto", back_populates="empresa")
 
+    # Agregar relación con productos
+    productos = relationship("Producto", back_populates="empresa")
+
     # Una empresa puede tener mcuhas oportunidades
-    oportunidades = relationship("Oportunidad", back_populates="empresa")
+    #oportunidades = relationship("Oportunidad", back_populates="empresa")
 
     def __repr__(self):
         return f"<Empresa {self.razon_social}>"    

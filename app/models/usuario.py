@@ -21,13 +21,19 @@ class Usuario(Base):
     telefono = Column(String(20), nullable=True)
 
     # Autenticación
-    password_hash = Column(Column(String(255), nullable=False))
+    password_hash = Column(String(255), nullable=False)
 
     # Rol del uuario: Admin, Gerente, Vendedor, Soporte
     rol = Column(String(20), nullable=False, default="Vendedor")
 
     # Menta mensual de ventas (Para vendedores)
     meta_mensual = Column(Numeric(15,2), nullable=True)
+
+
+    # Otros datos
+    fecha_contratacion = Column(DateTime, server_default=func.now(), nullable=True)
+    departamento = Column(String(50), nullable=True, default="Ventas")
+    notas_internas = Column(Text, nullable=True)
 
     # Estado
     activo = Column(Boolean, default=True, nullable=False)
@@ -44,10 +50,10 @@ class Usuario(Base):
     
     # Relaciones con otros modelos
     # Un usuario puede tener mcuhas oportunidades asigandas
-    oportunidades = relationship("Oportunidad", back_populates="vendedor_asignado")
+    #oportunidades = relationship("Oportunidad", back_populates="vendedor_asignado")
 
     # Un usuario puede hacer muchas llamadas
-    llamadas = relationship("Llamada", back_populates="vendedor")
+    #llamadas = relationship("Llamada", back_populates="vendedor")
 
     def __repr__(self):
         """Representación en stgring del objeto"""
