@@ -2,59 +2,49 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.db.session import engine, Base
-from app.db.init_db import init_db
 
-# Crear la aplicación de FastAPI
+# Importar modelos para que se registren en Base.metadata
+from app.models.usuario import Usuario
+from app.models.empresa import Empresa
+from app.models.contacto import Contacto
+from app.models.producto import Producto
+
+# Importar router directamente (NO desde app.api)
+from app.api.usuarios import router as usuarios_router
+
 app = FastAPI(
-     title=settings.PROJECT_NAME,
-     description="Api para CRM de control de ventas",
-     version="1.0.0",
-     docs_url="/docs",
-     redoc_url="/redoc"
+    title=settings.PROJECT_NAME,
+    description="API para CRM de Control de Ventas",
+    version="1.0.0",
 )
 
-# Configurar CORS (para que el frontend pueda comunicarse)
-
+# Configurar CORS
 app.add_middleware(
-     CORSMiddleware,
-     allow_origins=["htto://localhost:3000"], # Frontend de reflex
-     allow_credentials=True,
-     allow_methods=["*"],
-     allow_headers=["*"],
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Evento al inicio
 @app.on_event("startup")
 def on_startup():
-     """ Se ejecuta cuando la API inicia"""
-     print("🚀 Iniciando CRM API")
+    """Inicializar base de datos al arrancar"""
+    Base.metadata.create_all(bind=engine)
+    print("🚀 CRM API iniciado")
 
-     # Crear tablas automáticamente
-     Base.metadata.create_all(bind=engine)
-     print("✅ Base de datos verificados")
-
+# Incluir routers directamente
+app.include_router(usuarios_router, prefix="/api/v1/usuarios", tags=["Usuarios"])
 
 @app.get("/")
 def root():
-     """ Endpoint raíz"""
-     return {
-          "message": "CRM API",
-          "version": "1.0.0",
-          "docs": "/docs",
-          "status": "operativo"
-     }
+    return {
+        "message": "CRM API",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "status": "operativo"
+    }
 
-@app.get("/healt")
-def healt_check():
-     """ Endpoint de salud"""
-     return {"status": "healthy"}
-
-
-if __name__ == "__main__":
-     import uvicorn
-     uvicorn.run(
-          "main:app",
-          host="0.0.0.0",
-          port=8000,
-          reload=True,
-     )
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
