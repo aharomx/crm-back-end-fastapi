@@ -11,7 +11,7 @@ class TimestampMixin:
         server_default=func.now(),
         nullable=False
     )
-    update_at = Column(
+    updated_at = Column(
         DateTime,
         server_default=func.now(),
         onupdate=func.now(),
