@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from app.core.config import settings
 from app.core.database import engine, Base
-from app.api.v1 import auth, prospects
+from app.api.v1 import auth, prospects, clients
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -15,6 +15,7 @@ app = FastAPI(
 # Registrar routers
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(prospects.router, prefix="/api/v1")
+app.include_router(clients.router, prefix="/api/v1")
 
 @app.on_event("startup")
 async def startup():
