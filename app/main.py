@@ -2,7 +2,14 @@
 from fastapi import FastAPI
 from app.core.config import settings
 from app.core.database import engine, Base
-from app.api.v1 import auth, prospects, clients, calls, appointments
+from app.api.v1 import (
+    auth, 
+    prospects, 
+    clients, 
+    calls, 
+    appointments,
+    quotes
+) 
 app = FastAPI(
     title=settings.APP_NAME,
     debug=settings.DEBUG,
@@ -17,6 +24,7 @@ app.include_router(prospects.router, prefix="/api/v1")
 app.include_router(clients.router, prefix="/api/v1")
 app.include_router(calls.router, prefix="/api/v1")
 app.include_router(appointments.router, prefix="/api/v1")
+app.include_router(quotes.router, prefix="/api/v1")
 
 @app.on_event("startup")
 async def startup():
