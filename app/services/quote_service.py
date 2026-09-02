@@ -153,3 +153,4 @@ class QuoteService:
         """ Obtiene estadísticas de cotizaciones """
 
         return await self.repository.get_stats(user_id)
+
