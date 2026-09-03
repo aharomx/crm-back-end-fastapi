@@ -446,7 +446,7 @@ class DashboardService:
             days = (quote.expiry_date - self.now).days
             alerts.append(Alert(
                 type="info",
-                message=f"📄 Cotización {quote.quote_number} vence en {days} días"
+                message=f"📄 Cotización {quote.quote_number} vence en {days} días",
                 link = f"/quotes/{quote.id}",
                 created_at= self.now
             ))
@@ -474,6 +474,33 @@ class DashboardService:
             ))
 
         return  alerts
+
+
+    async def get_dashboard(self, user_id: int) -> DashboardResponse:
+        """ Obtiene el dashboard completo """
+
+        # Obtener todas las métricas en paralelo
+        prospects = await self.get_prospect_metrics()
+        clients = await self.get_client_metrics()
+        calls = await self.get_call_metrics( user_id)
+        appointments = await self.get_appointment_metrics(user_id)
+        quotes = await self.get_quote_metrics(user_id)
+        orders = await self.get_order_metrics(user_id)
+
+        # Actividad reciente y alertas
+        recent_activity = await self.get_recent_activity(user_id)
+        alerts = await self.get_alerts(user_id)
+
+        return DashboardResponse(
+            prospects= prospects,
+            client= clients,
+            calls=calls,
+            appointments=appointments,
+            quotes=quotes,
+            orders=orders,
+            recent_activity=recent_activity,
+            alerts=alerts
+        )
     
 
     
