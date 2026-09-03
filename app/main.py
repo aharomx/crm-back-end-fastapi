@@ -9,7 +9,8 @@ from app.api.v1 import (
     calls, 
     appointments,
     quotes,
-    orders
+    orders,
+    dashboard
 ) 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -27,6 +28,7 @@ app.include_router(calls.router, prefix="/api/v1")
 app.include_router(appointments.router, prefix="/api/v1")
 app.include_router(quotes.router, prefix="/api/v1")
 app.include_router(orders.router, prefix="/api/v1")
+app.include_router(dashboard.router, prefix="/api/v1")
 
 @app.on_event("startup")
 async def startup():
